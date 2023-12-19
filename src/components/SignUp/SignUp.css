@@ -1,0 +1,25 @@
+.formCard input{
+    width: 400px;
+    background: transparent;
+    border: 1px solid rgba(255, 166, 0, 0.517);
+    border-radius: 10px;
+    padding: 10px;
+}
+.formCard{
+    width: fit-content;
+    border: 1px solid rgba(255, 166, 0, 0.517);
+    padding: 30px;
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+}
+.formCard p{
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.submitBtn{
+    background-color: rgba(255, 166, 0, 0.500) !important;
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+}
