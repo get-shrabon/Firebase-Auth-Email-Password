@@ -2,20 +2,36 @@ import auth from "../../Firebase/firebase.config";
 import "./SignUp.css";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState(" ");
   const [success, setSuccess] = useState("");
+  const [showPass, setShowPass] = useState(false);
   const handleSignUp = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
+    const accepted = e.target.terms.checked;
     setErrorMessage("");
     setSuccess("");
+    {
+      if (password.length < 6) {
+        setErrorMessage("! Password Should be at least 6 charecter Longer");
+        return;
+      } else if (!/[A-Z]/.test(password)) {
+        setErrorMessage("! Your Password Must be one uppercase");
+        return;
+      } else if (!accepted) {
+        setErrorMessage("! Please Accept our terms and condition");
+        return;
+      }
+    }
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         const user = result.user;
         console.log(user);
-        setSuccess("your email submited is seccesed");
+        setSuccess("Your email submited is successed");
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -39,7 +55,31 @@ const SignUp = () => {
           </div>
           <div>
             <p>Password:</p>
-            <input type="password" name="password" id="" required />
+            <div className="flex items-center">
+              <input
+                type={showPass ? "text" : "password"}
+                name="password"
+                id=""
+                required
+              />
+              <span
+                className="ml-[-40px] cursor-pointer"
+                onClick={() => setShowPass(!showPass)}
+              >
+                {showPass ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 mt-3">
+            <input
+              className="checkBox checkbox checkbox-secondary"
+              type="checkbox"
+              name="terms"
+              id="terms"
+            />
+            <label className="text-[14px]" htmlFor="terms">
+              Accept Our terms and condition
+            </label>
           </div>
           <div>
             <input className="submitBtn mt-4" type="submit" value="Submit" />
