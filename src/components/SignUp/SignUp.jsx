@@ -1,9 +1,13 @@
 import auth from "../../Firebase/firebase.config";
 import "./SignUp.css";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState(" ");
   const [success, setSuccess] = useState("");
@@ -32,6 +36,14 @@ const SignUp = () => {
         const user = result.user;
         console.log(user);
         setSuccess("Your email submited is successed");
+        // Email Varification
+        sendEmailVerification(result.user)
+          .then(() => {
+            alert("Please Check Your email and Verify your Account");
+          })
+          .catch((error) => {
+            setErrorMessage(error.message);
+          });
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -70,23 +82,33 @@ const SignUp = () => {
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-2 mt-3">
-            <input
-              className="checkBox checkbox checkbox-secondary"
-              type="checkbox"
-              name="terms"
-              id="terms"
-            />
-            <label className="text-[14px]" htmlFor="terms">
-              Accept Our terms and condition
-            </label>
+          {errorMessage && <p className="text-red-800">{errorMessage}</p>}
+          {success && <p className="text-green-700">{success}</p>}
+          <div className="flex items-center justify-between mt-3">
+            <div className="flex items-center gap-2">
+              <input
+                className="checkBox checkbox checkbox-secondary"
+                type="checkbox"
+                name="terms"
+                id="terms"
+              />
+              <label className="text-[14px]" htmlFor="terms">
+                Accept Our terms and condition
+              </label>
+            </div>
+            <div>
+              <Link
+                to="/login"
+                className="text-[14px] underline text-sky-600 hover:no-underline"
+              >
+                Already Have an Account
+              </Link>
+            </div>
           </div>
           <div>
             <input className="submitBtn mt-4" type="submit" value="Submit" />
           </div>
         </form>
-        {errorMessage && <p className="text-red-800">{errorMessage}</p>}
-        {success && <p className="text-green-700">{success}</p>}
       </div>
     </div>
   );
